@@ -12,12 +12,30 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var models = [ToDoListItem]()
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let item = models[indexPath.row]
-        deleteItem(item: item)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
+    
+  
+    
+    //iOS11引進的方法
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completionHandler in
+            let item = self.models[indexPath.row]
+            self.deleteItem(item: item)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            completionHandler(true)
+        }
+        
+        let config = UISwipeActionsConfiguration(actions: [deleteAction])
+        return config
     }
     
+    //iOS2的方法
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        let item = models[indexPath.row]
+//        deleteItem(item: item)
+//        //有動畫效果的刪除
+//        tableView.deleteRows(at: [indexPath], with: .automatic)
+//    }
+//    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
