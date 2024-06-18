@@ -13,18 +13,23 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var models = [ToDoListItem]()
     
     
-  
-    
     //iOS11引進的方法
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let item = self.models[indexPath.row]
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { action, view, completionHandler in
-            let item = self.models[indexPath.row]
+            
             self.deleteItem(item: item)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             completionHandler(true)
         }
-        
-        let config = UISwipeActionsConfiguration(actions: [deleteAction])
+        let highlightText = item.isHighlighted ? "unhighlight" : "highlight"
+        let highlightAction = UIContextualAction(style: .normal, title: highlightText) { action, view, completionHandler in
+            item.isHighlighted.toggle()
+            tableView.reloadData()
+            completionHandler(true)
+        }
+        highlightAction.backgroundColor = .blue.withAlphaComponent(0.6)
+        let config = UISwipeActionsConfiguration(actions: [deleteAction,highlightAction])
         return config
     }
     
@@ -87,6 +92,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let dateString = formatter.string(from: model.createdAt!)
         cell.dateLabel.text = dateString
         cell.toDoLabel.text = model.name
+        if model.isHighlighted{
+            cell.backgroundColor = .yellow
+        } else {
+            cell.backgroundColor = nil
+        }
+        
         return cell
         
     }
@@ -176,7 +187,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             getAllItems()
         }
         catch{
-            
+            //error
         }
         
     }
@@ -192,7 +203,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             getAllItems()
         }
         catch{
-            
+            //error
         }
         
     }
