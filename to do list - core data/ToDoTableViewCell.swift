@@ -8,10 +8,16 @@
 import UIKit
 
 class ToDoTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var toDoLabel:UILabel!
+    @IBOutlet weak var dateLabel:UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        toDoLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        dateLabel.font = UIFont.systemFont(ofSize: 12)
+        dateLabel.textColor = .gray
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
